@@ -27,6 +27,149 @@ public class RangeTestSuite {
 	public void tearDown() throws Exception {
 	}
 
+	/**
+     * ********************** contains() test ************************
+     * public boolean contains(double value)
+     * Returns true if the specified value is within the range and false otherwise
+     * Parameters:
+     * value - the value to be tested
+     * Returns:
+     * true if the range contains the specified value.
+     */
+    
+    
+    /**
+     * This tests if contains() functions correctly for a range of values  from BLB to AUB
+     */
+    @Test
+    public void containsValueJustBelowLowerBound() {
+        assertFalse("The result should be false when input value is just below the lower bound of the range",
+        exampleRange.contains(-100.00001));
+    }
+    
+    
+    /**
+     * This tests if contains() functions correctly for a range of values  from BLB to AUB
+     */
+    @Test
+    public void containsLowerBound() {
+    	assertTrue("The result should be true when input value is the lower bound of the range",
+                exampleRange.contains(-100));
+    }
+    
+    
+    /**
+     * This tests if contains() functions correctly for a range of values  from BLB to AUB
+     */
+    @Test
+    public void containsValueJustAboveLowerBound() {
+    	assertTrue("The result should be true when input value is just above the lower bound",
+                exampleRange.contains(-99.99999));
+    }
+    
+    
+    /**
+     * This tests if contains() functions correctly for a range of values  from BLB to AUB
+     */
+    @Test
+    public void containsNominalValue() {
+    	assertTrue("The result should be true when input value is a nominal value within the range",
+                exampleRange.contains(50));
+    }
+    
+    
+    /**
+     * This tests if contains() functions correctly for a range of values  from BLB to AUB
+     */
+    @Test
+    public void containsValueJustBelowUpperBound() {
+    	assertTrue("The result should be true when input value is just below the upper bound of the range",
+                exampleRange.contains(99.99999));
+    }
+    
+    
+    /**
+     * This tests if contains() functions correctly for a range of values  from BLB to AUB
+     */
+    @Test
+    public void containsUpperBound() {
+    	assertTrue("The result should be true when input value is the upper bound of the range",
+                exampleRange.contains(100));
+    }
+    
+    
+    /**
+     * This tests if contains() functions correctly for a range of values  from BLB to AUB
+     */
+    @Test
+    public void containsValueJustAboveUpperBound() {
+    	assertFalse("The result should be false when input value is just above the upper bound of the range",
+                exampleRange.contains(100.00001));
+    }
+    
+    
+    /**
+     * This tests if contains() functions correctly for a range of values  from BLB to AUB
+     */
+    @Test
+    public void containsNotANumber() {
+    	assertFalse("The result should be false when input value is not a number",
+                exampleRange.contains(Double.NaN));
+    }
+    
+    
+    /**
+     * This tests if contains() functions correctly for a range of values  from BLB to AUB
+     */
+    @Test
+    public void containsACharacter() {
+    	assertFalse("The result should be false when input value is a character",
+                exampleRange.contains('n'));
+    }
+    
+    
+    /**
+     * This tests if contains() functions correctly for a range of values  from BLB to AUB
+     */
+    @Test
+    public void containsValueInRangeWithNegativeBoundaries() {
+    	Range testRange = new Range(-10, -5);
+    	assertTrue("The result should be true when input value is within a range with negative boundary values",
+                testRange.contains(-7));
+    }
+    
+    
+    /**
+     * This tests if contains() functions correctly for a range of values  from BLB to AUB
+     */
+    @Test
+    public void containsValueEqualToBothLowerAndUpperBoundaries() {
+    	Range testRange = new Range(5, 5);
+    	assertTrue("The result should be true when input value is equal to the lower and upper boundaries of the range",
+                testRange.contains(5));
+    }
+    
+    
+    /**
+     * NEW TEST ADDED
+     * This tests if contains() functions correctly for a range of values  from BLB to AUB
+     */
+    @Test
+    public void containsValueLessThanLowerBoundAndGreaterThanUpperBound() {
+    	try {
+    		Range testRange = new Range(4, -1);
+        	testRange.contains(3);
+        	fail("IllegalArgumentException should be thrown when the input value is lower than the lower bound "
+        			+ "but higher than the upper bound!");
+    	} catch (IllegalArgumentException e){
+    		// Asserts that runnable throws an exception of type expectedThrowable when executed.
+    		
+    	} catch (Exception e) {
+    		fail("IllegalArgumentException should be thrown when the input value is lower than the lower bound "
+    				+ "but higher than the upper bound, not throw a " + e.toString() + " exception");
+    	}
+    	
+    }
 
 
 	@Test
