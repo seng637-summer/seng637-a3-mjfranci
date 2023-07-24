@@ -347,6 +347,179 @@ public class RangeTestSuite {
     	assertFalse("Should return false due to LB>UB",
     			this.exampleRange.intersects(99.99999,-99.99999));
     }
+    /**
+     * ********************** shift () test ************************
+     * Returns a range the size of the input range, which has been moved
+     * positively (to the right) by the delta value. If allowZeroCrossing is
+     * false, any bound which crosses the zero mark after shifting (either
+     * from negative to positive or positive to negative), will become zero.
+     * Parameters:
+     * base - the base range (null not permitted).
+     * delta - the shift amount.
+     * allowZeroCrossing - a flag that determines whether or not the bounds of
+     * the range are allowed to cross zero after adjustment
+     * Returns:
+     * A range representing the base range shifted by the delta.
+     * Throws:
+     * InvalidParameterException - if null base object is passed in.
+     */
+    
+    
+    /**
+     * This method tests if the shift() function correctly shifts the range positively by delta
+     */
+    @Test
+    public void positiveShiftRangeRight() {
+        double delta = 50;
+        Range expectedRange = new Range(-50,150);
+        Range shiftedRange = Range.shift(this.exampleRange, delta);
+
+        // Assertion
+        assertEquals("Shift the range right (should not trigger Zero Crossing)", expectedRange,shiftedRange);
+    }
+
+    /**
+     * This method tests if the shift() function correctly shifts the range negatively by delta
+     */
+    @Test
+    public void negativeShiftRangeLeft() {
+        double delta = -75.0;
+        Range expectedRange = new Range(-175,25);
+        Range shiftedRange = Range.shift(this.exampleRange, delta);
+
+        // Assertion
+        assertEquals("Shift the range left (should not trigger Zero Crossing)", expectedRange,shiftedRange);
+    }
+
+    /**
+     * This method tests if the shift() function correctly shifts the range negatively by a delta of 0.0.
+     */
+    @Test
+    public void zeroDeltaNoShiftRange() {
+        double delta = 0.0;
+        Range shiftedRange = Range.shift(this.exampleRange, delta);
+
+        // Assertion
+        assertEquals("Should not shift range ", exampleRange,shiftedRange);
+    }
+    /**
+     * This method tests if the shift() function correctly shifts the range positively by delta where the LB crosses the 0.
+     */
+    @Test
+    public void positiveShiftLbZeroCrossing() {
+        double delta = 100.00001;
+        Range expectedRange = new Range(0.0, 200.00001);
+        Range shiftedRange = Range.shift(this.exampleRange, delta);
+
+        // Assertion
+        assertEquals("Shift the range right with only LB crossing zero ", expectedRange,shiftedRange);
+    }
+    
+    /**
+     * This method tests if the shift() function correctly shifts the range positively by delta where the LB and UB crosses the 0.
+     */
+    @Test
+    public void positiveShiftLbAndUbZeroCrossing() {
+        double delta = 100.00001;
+        this.exampleRange = new Range(-100,-50);
+        Range expectedRange = new Range(0.0,0.0);
+        Range shiftedRange = Range.shift(exampleRange, delta);
+
+        // Assertion
+        assertEquals("Shift the range right with LB and UB crossing zero ", expectedRange,shiftedRange);
+
+    }
+
+    /**
+     * This method tests if the shift() function correctly shifts the range negatively by delta where the UB crosses the 0.
+     */
+    @Test
+    public void negativeShiftUbZeroCrossing() {
+        double delta = -100.00001;
+        this.exampleRange = new Range(100,150);
+        Range expectedRange = new Range(0.0, 49.99999);
+        Range shiftedRange = Range.shift(this.exampleRange, delta);
+
+        // Assert
+        assertEquals("Shift the range left with only LB zero crossing ", expectedRange,shiftedRange);
+
+
+    }
+    
+    /**
+     * This method tests if the shift() function correctly shifts the range negatively by delta where the LB and UB cross the 0.
+     */
+    @Test
+    public void negativeShiftLbAndUbZeroCrossing() {
+    	double delta = -100.00001;
+        this.exampleRange = new Range(50,100);
+        Range expectedRange = new Range(0.0,0.0);
+        Range shiftedRange = Range.shift(this.exampleRange, delta);
+
+       
+        // Assertion
+        assertEquals("Shift the range left with LB and UB crossing zero", expectedRange, shiftedRange);
+    }
+    
+    /**
+     * This method tests if the shift() function gets a null parameter and gets an InvalidParameterException.
+     */
+    @Test
+    public void nullBaseInvalidParameterException() {
+        Range base = null;
+        double delta = 10.0;
+
+        try {
+            Range shiftedRange = Range.shift(base, delta);
+            fail("nullBase should return an InvalidParameterException");
+        } catch (InvalidParameterException e) {
+            // Expecting InvalidParameterException, test will pass.
+        } catch (Exception e) {
+            fail("nullBase should return an InvalidParameterException, not throw a " + e.toString() + " exception");
+        }
+    }
+    
+    // NEW Test Case Added to Assignment 3
+    // Added test since shift(double, double) uses shift(double, double, boolean). This test method
+    // allows the upper or lower bound to cross the zero line.
+    
+    @Test
+    public void withLbCrossingZero() {
+    	double delta = 150;
+        Range expectedRange = new Range(50.0,250.0);
+        Range shiftedRange = Range.shift(this.exampleRange, delta, true);
+
+       
+        // Assertion
+        assertEquals("Shift the range left with LB crossing zero (allowed)", expectedRange, shiftedRange);
+    }
+    
+    // NEW Test Case Added to Assignment 3
+    // This test case shifts the range so that the ub ends up at zero.
+    @Test
+    public void ubShiftedtoZero() {
+    	double delta = -100;
+        Range expectedRange = new Range(-200,0.0);
+        Range shiftedRange = Range.shift(this.exampleRange, delta);
+
+       
+        // Assertion
+        assertEquals("Shift the range right with LB crossing zero (allowed)", expectedRange, shiftedRange);
+    }
+    
+    // NEW Test Case Added to Assignment 3
+    // This test case shifts the range so that the lb ends up at zero.
+    @Test
+    public void lbShiftedtoZero() {
+    	double delta = 100;
+        Range expectedRange = new Range(0.0,200.0);
+        Range shiftedRange = Range.shift(this.exampleRange, delta);
+
+       
+        // Assertion
+        assertEquals("Shift the range left with UB crossing zero (allowed)", expectedRange, shiftedRange);
+    }
+
     
 
 
