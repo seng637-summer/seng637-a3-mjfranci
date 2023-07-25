@@ -9,22 +9,33 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class DataUtilitiesTestSuite extends DataUtilities {
+	
+	private Mockery mockingContext;
+	private KeyedValues keyedValues;
+	private Values2D values;
+	private DefaultKeyedValues kv;
 
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-	}
+	@BeforeClass public static void setUpBeforeClass() throws Exception {
+    }
 
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
-
-	@Before
-	public void setUp() throws Exception {
-	}
-
+    @Before
+    public void setUp() throws Exception {
+        this.mockingContext = new Mockery();
+        this.keyedValues = mockingContext.mock(KeyedValues.class);
+        // Mock Value2D object that contains values 
+	    this.values = mockingContext.mock(Values2D.class);
+	    this.kv = new DefaultKeyedValues();
+    }
+	
 	@After
-	public void tearDown() throws Exception {
-	}
+    public void tearDown() throws Exception {
+    }
+
+    @AfterClass
+    public static void tearDownAfterClass() throws Exception {
+    }
+	
+	
 
 	/**
      * ***********************************************************
@@ -998,36 +1009,6 @@ public class DataUtilitiesTestSuite extends DataUtilities {
 	    });
 	    double result = DataUtilities.calculateColumnTotal(values, 0);
 	    assertEquals("Correctly calculate the total column value of data containing the maximum integer value possible", Integer.MAX_VALUE + 10.0, result, .000000001d);
-	}
-
-	@Test
-	public void testCalculateColumnTotalValues2DIntIntArray() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testCalculateRowTotalValues2DInt() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testCalculateRowTotalValues2DIntIntArray() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testCreateNumberArray() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testCreateNumberArray2D() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testGetCumulativePercentages() {
-		fail("Not yet implemented");
 	}
 
 }
