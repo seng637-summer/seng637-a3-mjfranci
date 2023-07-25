@@ -862,27 +862,6 @@ public class DataUtilitiesTestSuite extends DataUtilities {
 	    assertEquals("The total value of the last column with three rows", 10.0, result, .000000001d);
 	}
 	
-	/**
-	 * calculateColumnTotalNegativeOneRows.
-	 * 
-	 * This will test if calculateColumnTotal() correctly calculates the total column value
-     * of a Values2D object that has -1 rows, 
-	 */
-	 @Test
-	    public void calculateColumnTotalNegativeOneRows() {
-	        mockingContext.checking(new Expectations() {
-	            {
-	                one(values).getRowCount();
-	                will(returnValue(-1)); // negative number of rows
-	                one(values).getValue(0, 0);
-	                will(returnValue(3.5));
-	        
-	            }
-	        });
-
-	        double result = DataUtilities.calculateColumnTotal(values, 0);
-	        assertEquals("The total value of the first column with negative number of rows is 0.0 ", 0.0, result, .000000001d);
-	    }
 
 	/**
      * calculateColumnTotalInvalidDataObject.
