@@ -693,9 +693,311 @@ public class DataUtilitiesTestSuite extends DataUtilities {
     }
     
 
+	/****************************************************************
+     * **************************************************************
+     * ********* calculateColumnTotal() test*************************
+     * **************************************************************
+     * **************************************************************
+     * public static double calculateColumnTotal(Values2D data, int column)
+     * Returns the sum of the values in one column of the supplied data table. With invalid
+     * input, a total of zero will be returned.
+     */
+    
+    
+    /**
+     * calculateColumnTotalOneRow.
+     * 
+     * This will test if calculateColumnTotal correctly calculates the total column value with a Values2D object that has 1 row
+     */
+    @Test 
+    public void calculateColumnTotalOneRow() {
+        mockingContext.checking(new Expectations() {
+            {
+                one(values).getRowCount();
+                will(returnValue(1));
+                one(values).getValue(0, 0);
+                will(returnValue(7));
+        
+            }
+        });
+
+        double result = DataUtilities.calculateColumnTotal(values, 0);
+        assertEquals("The sum of the values in the first column with a single row", 7.0, result, .000000001d);
+    }
+    
+    
+    /**
+     * calculateColumnTotalFirstColTwoRows.
+     * 
+     * This will test if calculateColumnTotal correctly calculates the total column value of the first column
+     * of a Values2D object that has 2 rows
+     */
 	@Test
-	public void testCalculateColumnTotalValues2DInt() {
-		fail("Not yet implemented");
+	public void calculateColumnTotalFirstColTwoRows() {
+	    mockingContext.checking(new Expectations() {
+	        {
+	            one(values).getRowCount();
+	            will(returnValue(2));
+	            one(values).getValue(0, 0);
+	            will(returnValue(7));
+	            one(values).getValue(1, 0);
+	            will(returnValue(3));
+	        }
+	    });
+	    double result = DataUtilities.calculateColumnTotal(values, 0);
+	    assertEquals("The total value of the first column with two rows", 10.0, result, .000000001d);
+	}
+	
+	/**
+     * calculateColumnTotalSecondColTwoRows.
+     * 
+     * This will test if calculateColumnTotal correctly calculates the total column value of the second column
+     * of a Values2D object that has 2 rows
+     */
+	@Test
+	public void calculateColumnTotalSecondColTwoRows() {
+	    mockingContext.checking(new Expectations() {
+	        {
+	            one(values).getRowCount();
+	            will(returnValue(2));
+	            one(values).getValue(0, 1);
+	            will(returnValue(7));
+	            one(values).getValue(1, 1);
+	            will(returnValue(3));
+	        }
+	    });
+	    double result = DataUtilities.calculateColumnTotal(values, 1);
+	    assertEquals("The total value of the second column with two rows", 10.0, result, .000000001d);
+	}
+
+	/**
+     * calculateColumnTotalFirstColThreeRows.
+     * 
+     * This will test if calculateColumnTotal correctly calculates the total column value of the second column
+     * of a Values2D object that has 3 rows
+     */
+	@Test
+	public void calculateColumnTotalFirstColThreeRows() {
+	    mockingContext.checking(new Expectations() {
+	        {
+	            one(values).getRowCount();
+	            will(returnValue(3));
+	            one(values).getValue(0, 0);
+	            will(returnValue(7));
+	            one(values).getValue(1, 0);
+	            will(returnValue(3));
+	            one(values).getValue(2, 0);
+	            will(returnValue(2));
+	        }
+	    });
+	    double result = DataUtilities.calculateColumnTotal(values, 0);
+	    assertEquals("The total value of the first column with three rows", 12.0, result, .000000001d);
+	}
+	
+	/**
+     * calculateColumnTotalFirstColThreeRows.
+     * 
+     * This will test if calculateColumnTotal correctly calculates the total column value of the middle column
+     * of a Values2D object that has 3 rows
+     */
+	@Test
+	public void calculateColumnTotalMiddleColThreeRows() {
+	    mockingContext.checking(new Expectations() {
+	        {
+	            one(values).getRowCount();
+	            will(returnValue(3));
+	            one(values).getValue(0, 1);
+	            will(returnValue(7));
+	            one(values).getValue(1, 1);
+	            will(returnValue(3));
+	            one(values).getValue(2, 1);
+	            will(returnValue(2));
+	        }
+	    });
+	    double result = DataUtilities.calculateColumnTotal(values, 1);
+	    assertEquals("The total value of the middle column with three rows", 12.0, result, .000000001d);
+	}
+
+	/**
+     * calculateColumnTotalFirstColThreeRows.
+     * 
+     * This will test if calculateColumnTotal() correctly calculates the total column value of the last column
+     * of a Values2D object that has 3 rows
+     */
+	@Test
+	public void calculateColumnTotalLastColThreeRows() {
+	    mockingContext.checking(new Expectations() {
+	        {
+	            one(values).getRowCount();
+	            will(returnValue(3));
+	            one(values).getValue(0, 2);
+	            will(returnValue(7));
+	            one(values).getValue(1, 2);
+	            will(returnValue(3));
+	            one(values).getValue(2, 2);
+	            will(returnValue(0));
+	        }
+	    });
+	    double result = DataUtilities.calculateColumnTotal(values, 2);
+	    assertEquals("The total value of the last column with three rows", 10.0, result, .000000001d);
+	}
+	
+	/**
+	 * calculateColumnTotalNegativeOneRows.
+	 * 
+	 * This will test if calculateColumnTotal() correctly calculates the total column value
+     * of a Values2D object that has -1 rows, 
+	 */
+	 @Test
+	    public void calculateColumnTotalNegativeOneRows() {
+	        mockingContext.checking(new Expectations() {
+	            {
+	                one(values).getRowCount();
+	                will(returnValue(-1)); // negative number of rows
+	                one(values).getValue(0, 0);
+	                will(returnValue(3.5));
+	        
+	            }
+	        });
+
+	        double result = DataUtilities.calculateColumnTotal(values, 0);
+	        assertEquals("The total value of the first column with negative number of rows is 0.0 ", 0.0, result, .000000001d);
+	    }
+
+	/**
+     * calculateColumnTotalInvalidDataObject.
+     * 
+     * This will test passing an invalid data object (null) to calculateColumnTotal() to see if it
+     * throws the correct exception.
+     */
+	@Test 
+   	public void calculateColumnTotalInvalidDataObject() {
+		try {
+			// call calculateColumnTotal with a null value
+	   	    double result = DataUtilities.calculateColumnTotal(null, 0);
+			fail("calculateColumnTotal should have thrown an exception");
+
+		} catch (Exception e) {
+			assertEquals("calculateColumnTotal throws an exception", 
+					InvalidParameterException.class, 
+						e.getClass());
+		}
+   	}
+
+
+	/**
+	 * calculateColumnTotalZeroRows.
+	 * 
+	 * This will test if calculateColumnTotal() correctly calculates the total column value 
+	 * an empty Values2D object that has contains no rows or values
+	 */
+    @Test
+    public void calculateColumnTotalZeroRows() {
+        mockingContext.checking(new Expectations() {
+            {
+                one(values).getRowCount();
+                will(returnValue(0)); // zero rows
+            }
+        });
+
+        double result = DataUtilities.calculateColumnTotal(values, 0);
+        assertEquals("The calculated total value of an empty data object should be 0", 0.0, result, .000000001d);
+    }
+    
+	/**
+     * calculateColumnTotalNegativeValue.
+     * 
+     * This will test if calculateColumnTotal correctly calculates the total column value 
+     * of a Values2D object that contains a negative value
+     */
+	@Test
+	public void calculateColumnTotalNegativeValue() {
+	    mockingContext.checking(new Expectations() {
+	        {
+	            one(values).getRowCount();
+	            will(returnValue(3));
+	            one(values).getValue(0, 0);
+	            will(returnValue(7));
+	            one(values).getValue(1, 0);
+	            will(returnValue(3));
+	            one(values).getValue(2, 0);
+	            will(returnValue(-1)); // negative value
+	        }
+	    });
+	    double result = DataUtilities.calculateColumnTotal(values, 0);
+	    assertEquals("Correctly calculate the total column value of data containing a negative value", 9.0, result, .000000001d);
+	}
+	
+	/**
+     * calculateColumnTotalNullValue.
+     * 
+     * This will test if calculateColumnTotal correctly calculates the total column value 
+     * of a Values2D object that contains a null value
+     */
+    @Test 
+   	public void calculateColumnTotalNullValue() {
+   	    mockingContext.checking(new Expectations() {
+   	        {
+   	            one(values).getRowCount();
+   	            will(returnValue(3));
+   	            one(values).getValue(0, 0);
+   	            will(returnValue(7));
+   	            one(values).getValue(1, 0);
+	            will(returnValue(3));
+   	            one(values).getValue(2, 0);
+   	            will(returnValue(null)); // null value
+   	        }
+   	    });
+   	    double result = DataUtilities.calculateColumnTotal(values, 0);
+   	    assertEquals("Correctly calculate the total column value of data containing a null value", 10.0, result, .000000001d);
+   	}
+	
+	/**
+     * calculateColumnTotalMinimumValue.
+     * 
+     * This will test if calculateColumnTotal correctly calculates the total column value 
+     * of a Values2D object that contains the minimum value possible
+     */
+	@Test
+	public void calculateColumnTotalMinimumValue() {
+	    mockingContext.checking(new Expectations() {
+	        {
+	            one(values).getRowCount();
+	            will(returnValue(3));
+	            one(values).getValue(0, 0);
+	            will(returnValue(7));
+	            one(values).getValue(1, 0);
+	            will(returnValue(3));
+	            one(values).getValue(2, 0);
+	            will(returnValue(Integer.MIN_VALUE)); // minimum integer value
+	        }
+	    });
+	    double result = DataUtilities.calculateColumnTotal(values, 0);
+	    assertEquals("Correctly calculate the total column value of data containing the minimum integer value possible", Integer.MIN_VALUE + 10.0, result, .000000001d);
+	}
+	
+	/**
+     * calculateColumnTotalMaximumValue.
+     * 
+     * This will test if calculateColumnTotal correctly calculates the total column value 
+     * of a Values2D object that contains the maximum value possible
+     */
+	@Test
+	public void calculateColumnTotalMaximumValue() {
+	    mockingContext.checking(new Expectations() {
+	        {
+	            one(values).getRowCount();
+	            will(returnValue(3));
+	            one(values).getValue(0, 0);
+	            will(returnValue(7));
+	            one(values).getValue(1, 0);
+	            will(returnValue(3));
+	            one(values).getValue(2, 0);
+	            will(returnValue(Integer.MAX_VALUE)); // maximum integer value
+	        }
+	    });
+	    double result = DataUtilities.calculateColumnTotal(values, 0);
+	    assertEquals("Correctly calculate the total column value of data containing the maximum integer value possible", Integer.MAX_VALUE + 10.0, result, .000000001d);
 	}
 
 	@Test
