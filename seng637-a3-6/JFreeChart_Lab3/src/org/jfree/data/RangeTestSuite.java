@@ -521,6 +521,149 @@ public class RangeTestSuite {
     }
 
     
+    /**
+     * ********************** expandToInclude() test ************************
+     * public static Range expandToInclude(Range range, double value)
+     * Returns a range that includes all the values in the specified range AND contains the specified value.
+     * Parameters:
+     * range - the range (null permitted).
+     * value - the value that must be included
+     * Returns:
+     * A range which spans over the input range, and has been expanded to contain the input value.
+     */
+    
+    
+    /**
+     * expandToIncludeBelowLowerBound.
+     * 
+     * This will test if expandToInclude() correctly includes a values below the lower bound of the range
+     */
+	@Test
+	public void expandToIncludeBelowLowerBound() {
+		Range expectedRange = new Range(-100.00001, 100.0);
+		Range newRange = Range.expandToInclude(this.exampleRange, -100.00001);
+		assertEquals("Expanding range to include a value below the lower bound", expectedRange, newRange);
+	}
+	
+	
+	/**
+     * expandToIncludeLowerBound.
+     * 
+     * This will test if expandToInclude() correctly handles including a value at the lower bound of the range. 
+     * There should be no change to the range
+     */
+	@Test
+	public void expandToIncludeLowerBound() {
+	    try {
+	    	Range newRange = Range.expandToInclude(this.exampleRange, -100.0);
+			assertEquals("Expanding range to include a value at the lower bound should not change the range", this.exampleRange, newRange);
+	    } catch (Exception e) {
+			fail("expandToInclude should return an unchanged range, not thrown an exception: " + e.toString());
+	    }
+	}
 
+	
+	/**
+     * expandToIncludeAboveLowerBound.
+     * 
+     * This will test if expandToInclude() correctly includes a values above the lower bound of the range
+     */
+	@Test
+	public void expandToIncludeAboveLowerBound() {
+		Range newRange = Range.expandToInclude(this.exampleRange, -99.99999
+);
+		assertEquals("Expanding range to include a value below the lower bound", this.exampleRange, newRange);
+	}
+	
+	
+	/**
+     * expandToIncludeNominalValue.
+     * 
+     * This will test if expandToInclude() correctly includes a nominal value
+     */
+	@Test
+	public void expandToIncludeNominalValue() {
+		Range newRange = Range.expandToInclude(this.exampleRange, 10.0);
+		assertEquals("Expanding range to include a nominal value", this.exampleRange, newRange);
+	}
+	
+	
+	/**
+     * expandToIncludeBelowUpperBound.
+     * 
+     * This will test if expandToInclude() correctly includes a values below the upper bound of the range
+     */
+	@Test
+	public void expandToIncludeBelowUpperBound() {
+		Range newRange = Range.expandToInclude(this.exampleRange, 99.99999
+);
+		assertEquals("Expanding range to include a value below the upper bound", this.exampleRange, newRange);
+	}
+	
+	
+	/**
+     * expandToIncludeUpperBound.
+     * 
+     * This will test if expandToInclude() correctly handles including a value at the upper bound of the range. 
+     * There should be no change to the range
+     */
+	@Test
+	public void expandToIncludeUpperBound() {
+		Range newRange = Range.expandToInclude(this.exampleRange, 100.0);
+		assertEquals("Expanding range to include a value at the upper bound", this.exampleRange, newRange);
+	}
+    
+	
+	/**
+     * expandToIncludeAboveUpperBound.
+     * 
+     * This will test if expandToInclude() correctly includes a values above the upper bound of the range
+     */
+	@Test
+	public void expandToIncludeAboveUpperBound() {
+		Range expectedRange = new Range(-100.0, 100.00001);
+		Range newRange = Range.expandToInclude(this.exampleRange, 100.00001);
+		assertEquals("Expanding range to include a value below the lower bound doesn't change ", expectedRange, newRange);
+	}
+	
+	
+	/**
+     * expandToIncludeMaxValue.
+     * 
+     * This will test if expandToInclude() correctly includes the maximum double value
+     */
+	@Test
+	public void expandToIncludeMaxValue() {
+		Range expectedRange = new Range(-100.0, Double.MAX_VALUE);
+		Range newRange = Range.expandToInclude(this.exampleRange, Double.MAX_VALUE);
+		assertEquals("Expanding range to include the maximum double value", expectedRange, newRange);
+	}
+	
+	
+	/**
+     * expandToIncludeMinValue.
+     * 
+     * This will test if expandToInclude() correctly includes the minimum double value
+     */
+	@Test
+	public void expandToIncludeMinValue() {
+		Range expectedRange = new Range(-100.0, Double.MIN_VALUE);
+		Range newRange = Range.expandToInclude(this.exampleRange, Double.MIN_VALUE);
+		assertEquals("Expanding range to include the minimum double value", expectedRange, newRange);
+	}
+
+	
+	/**
+     * expandToIncludeNullRange.
+     * 
+     * This will test if expandToInclude() correctly handles a null range. 
+     * Null is a permissible range, and should return a range consisting of only the given value
+     */
+	@Test
+	public void expandToIncludeNullRange() {
+		Range expectedRange = new Range(20.0, 20.0);
+		Range newRange = Range.expandToInclude(null, 20.0);
+		assertEquals("Expanding a null range to include a value", expectedRange, newRange);
+	}
 
 }
