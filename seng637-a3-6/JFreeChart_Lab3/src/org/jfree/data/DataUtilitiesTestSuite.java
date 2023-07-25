@@ -31,10 +31,6 @@ public class DataUtilitiesTestSuite extends DataUtilities {
 	private Mockery mockingContext;
 	private KeyedValues keyedValues;
 	private Values2D values;
-
-	private Mockery mockingContext;
-	private KeyedValues keyedValues;
-	private Values2D values;
 	private DefaultKeyedValues kv;
 
 	@AfterClass
@@ -47,26 +43,16 @@ public class DataUtilitiesTestSuite extends DataUtilities {
 		this.keyedValues = mockingContext.mock(KeyedValues.class);
         // Mock Value2D object that contains values 
 	    this.values = mockingContext.mock(Values2D.class);
+	    this.kv = new DefaultKeyedValues();
 	}
 	@BeforeClass public static void setUpBeforeClass() throws Exception {
     }
 
-    @Before
-    public void setUp() throws Exception {
-        this.mockingContext = new Mockery();
-        this.keyedValues = mockingContext.mock(KeyedValues.class);
-        // Mock Value2D object that contains values 
-	    this.values = mockingContext.mock(Values2D.class);
-	    this.kv = new DefaultKeyedValues();
-    }
 	
 	@After
     public void tearDown() throws Exception {
     }
 
-    @AfterClass
-    public static void tearDownAfterClass() throws Exception {
-    }
 	
 	
 
@@ -1083,4 +1069,4 @@ public class DataUtilitiesTestSuite extends DataUtilities {
 	}
 
 }
-}
+
