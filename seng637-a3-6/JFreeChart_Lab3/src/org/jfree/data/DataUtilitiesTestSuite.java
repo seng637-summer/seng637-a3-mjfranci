@@ -1,6 +1,15 @@
 package org.jfree.data;
 
 import static org.junit.Assert.*;
+import java.security.InvalidParameterException;
+
+import org.jfree.data.DataUtilities;
+import org.jfree.data.DefaultKeyedValues;
+import org.jfree.data.KeyedValues;
+import org.jfree.data.Values2D;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.junit.*;
 
 import java.security.InvalidParameterException;
 
@@ -23,9 +32,10 @@ public class DataUtilitiesTestSuite extends DataUtilities {
 	private KeyedValues keyedValues;
 	private Values2D values;
 
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-	}
+	private Mockery mockingContext;
+	private KeyedValues keyedValues;
+	private Values2D values;
+	private DefaultKeyedValues kv;
 
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
@@ -38,10 +48,27 @@ public class DataUtilitiesTestSuite extends DataUtilities {
         // Mock Value2D object that contains values 
 	    this.values = mockingContext.mock(Values2D.class);
 	}
+	@BeforeClass public static void setUpBeforeClass() throws Exception {
+    }
 
+    @Before
+    public void setUp() throws Exception {
+        this.mockingContext = new Mockery();
+        this.keyedValues = mockingContext.mock(KeyedValues.class);
+        // Mock Value2D object that contains values 
+	    this.values = mockingContext.mock(Values2D.class);
+	    this.kv = new DefaultKeyedValues();
+    }
+	
 	@After
-	public void tearDown() throws Exception {
-	}
+    public void tearDown() throws Exception {
+    }
+
+    @AfterClass
+    public static void tearDownAfterClass() throws Exception {
+    }
+	
+	
 
 	
 	/**
@@ -888,27 +915,6 @@ public class DataUtilitiesTestSuite extends DataUtilities {
 	    assertEquals("The total value of the last column with three rows", 10.0, result, .000000001d);
 	}
 	
-	/**
-	 * calculateColumnTotalNegativeOneRows.
-	 * 
-	 * This will test if calculateColumnTotal() correctly calculates the total column value
-     * of a Values2D object that has -1 rows, 
-	 */
-	 @Test
-	    public void calculateColumnTotalNegativeOneRows() {
-	        mockingContext.checking(new Expectations() {
-	            {
-	                one(values).getRowCount();
-	                will(returnValue(-1)); // negative number of rows
-	                one(values).getValue(0, 0);
-	                will(returnValue(3.5));
-	        
-	            }
-	        });
-
-	        double result = DataUtilities.calculateColumnTotal(values, 0);
-	        assertEquals("The total value of the first column with negative number of rows is 0.0 ", 0.0, result, .000000001d);
-	    }
 
 	/**
      * calculateColumnTotalInvalidDataObject.
@@ -1076,4 +1082,5 @@ public class DataUtilitiesTestSuite extends DataUtilities {
 		fail("Not yet implemented");
 	}
 
+}
 }

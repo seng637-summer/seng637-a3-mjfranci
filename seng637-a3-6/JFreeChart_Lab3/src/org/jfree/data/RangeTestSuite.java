@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.security.InvalidParameterException;
 
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -11,7 +12,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.jfree.data.Range;
 
-public class RangeTestSuite {
+public class RangeTest {
 	private Range exampleRange; 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
