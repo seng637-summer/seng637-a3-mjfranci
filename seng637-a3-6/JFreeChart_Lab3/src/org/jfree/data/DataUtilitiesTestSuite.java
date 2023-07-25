@@ -380,6 +380,13 @@ public class DataUtilitiesTestSuite extends DataUtilities {
 	             will(returnValue(null)); // Will be 10
 	         }
 	     });
+	     
+	     // Calculate result of the first row in values
+	     double result = DataUtilities.calculateRowTotal(values, 0);
+	     assertEquals("The sum of a row with a negative column count is 0", 
+	    		 0.0, 
+	    		 result, 
+	    		 .000000001d);
 	 }
 
 	
