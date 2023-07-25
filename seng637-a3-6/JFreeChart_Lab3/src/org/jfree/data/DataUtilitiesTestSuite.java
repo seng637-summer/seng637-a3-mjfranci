@@ -389,6 +389,310 @@ public class DataUtilitiesTestSuite extends DataUtilities {
 	    		 .000000001d);
 	 }
 
+	
+
+    /************************************************************************************
+     * **********************************************************************************
+     * ********* getCumulativePercentages(KeyedValues data) test*************************
+     * **********************************************************************************
+     * **********************************************************************************
+     * public static KeyedValues getCumulativePercentages(KeyedValues data)
+     * Returns a KeyedValues instance that contains the cumulative percentage values for the data 
+     * in another KeyedValues instance. The cumulative percentage is each value's cumulative 
+     * sum's portion of the sum of all the values.
+     */
+    
+    
+    /**
+     * This method tests the getCumulativePercentages() with one valid value in KeyedValues object
+     */
+	@Test
+    public void getCumulativePercentagesWithOneRowKeyedValue() {
+        mockingContext.checking(new Expectations() {
+            {
+                allowing(keyedValues).getItemCount();
+                will(returnValue(1));
+                allowing(keyedValues).getKey(0);
+                will(returnValue(0));
+                allowing(keyedValues).getValue(0);
+                will(returnValue(1.0));
+            }
+        });
+
+        KeyedValues result = DataUtilities.getCumulativePercentages(keyedValues);
+        assertEquals("The Cumulative Percentage of 1 value should be 1.0", 1.0, result.getValue(0));
+    }
+    
+	
+	
+	/**
+     * This method tests the getCumulativePercentages() with no value in KeyedValues object (empty object)
+     */
+    @Test
+    public void getCumulativePercentagesWithNoKeyedValues() {
+        KeyedValues noValues = new DefaultKeyedValues();
+
+        KeyedValues result = DataUtilities.getCumulativePercentages(noValues);
+        KeyedValues expected = new DefaultKeyedValues();
+        assertEquals(
+                "The Cumulative Percentage of an empty KeyedValues object should return an empty",
+                expected, result);
+    }
+    
+    
+    /**
+     * This method tests the getCumulativePercentages() with one element in KeyedValues object with value of zero 
+     */
+    @Test
+    public void getCumulativePercentagesWithOneKeyedValueOfZero() {
+        mockingContext.checking(new Expectations() {
+            {
+                allowing(keyedValues).getItemCount();
+                will(returnValue(1));
+                allowing(keyedValues).getKey(0);
+                will(returnValue(0));
+                allowing(keyedValues).getValue(0);
+                will(returnValue(0));
+            }
+        });
+
+        KeyedValues result = DataUtilities.getCumulativePercentages(keyedValues);
+        assertEquals("The cumulative percentage of a single KeyedValue of 0 should result in 0/0", 0.0 / 0.0,
+                result.getValue(0));
+    }
+    
+    /**
+     * This method tests the getCumulativePercentages() with one element in KeyedValues object with a null value 
+     */
+    @Test
+    public void test_getCumulativePercentagesOneKeyedValueOfNull() {
+        mockingContext.checking(new Expectations() {
+            {
+                allowing(keyedValues).getItemCount();
+                will(returnValue(1));
+                allowing(keyedValues).getKey(0);
+                will(returnValue(0));
+                allowing(keyedValues).getValue(0);
+                will(returnValue(null));
+            }
+        });
+
+        KeyedValues result = DataUtilities.getCumulativePercentages(keyedValues);
+        assertEquals("The cumulative percentage of a single KeyedValue of null value should be NaN", Double.NaN, result.getValue(0));
+    }
+    
+    
+    /**
+     * This method tests the getCumulativePercentages() of the first element in two-element in KeyedValues object 
+     */
+	  @Test
+	  public void getCumulativePercentagesFirstPercentageInTwoElementKV() {
+	      mockingContext.checking(new Expectations() {
+	          {
+	              allowing(keyedValues).getItemCount();
+	              will(returnValue(2));
+	              allowing(keyedValues).getKey(0);
+	              will(returnValue(0));
+	              allowing(keyedValues).getKey(1);
+	              will(returnValue(1));
+	              allowing(keyedValues).getValue(0);
+	              will(returnValue(5));
+	              allowing(keyedValues).getValue(1);
+	              will(returnValue(5));
+	
+	          }
+	      });
+	
+	      KeyedValues result = DataUtilities.getCumulativePercentages(keyedValues);
+	
+	      assertEquals("The cumulative percentage of 5 in 2 KeyedValue with sum of 10 should be 0.5", 0.5,
+	              result.getValue(0).doubleValue(), 0.000000001d);     
+	  }
+  
+  /**
+   * This method tests the getCumulativePercentages() of the second element in two-element in KeyedValues object 
+   */
+	@Test
+	public void getCumulativePercentagesSecondPercentageInTwoElementKV() {
+	    mockingContext.checking(new Expectations() {
+	        {
+	            allowing(keyedValues).getItemCount();
+	            will(returnValue(2));
+	            allowing(keyedValues).getKey(0);
+	            will(returnValue(0));
+	            allowing(keyedValues).getKey(1);
+	            will(returnValue(1));
+	            allowing(keyedValues).getValue(0);
+	            will(returnValue(5));
+	            allowing(keyedValues).getValue(1);
+	            will(returnValue(5));
+	
+	        }
+	    });
+	
+	    KeyedValues result = DataUtilities.getCumulativePercentages(keyedValues);
+	
+	    assertEquals("The cumulative percentage of the second 5 in 2 KeyedValue with sum of 10 should be 1.0", 1.0,
+	            result.getValue(1).doubleValue(), 0.000000001d);     
+	}
+    
+
+	/**
+	 * This method tests the getCumulativePercentages() of the first element in three-element KeyedValues object 
+	 */
+	@Test
+	public void getCumulativePercentagesFirstPercentageInThreeElementKV() {
+	  mockingContext.checking(new Expectations() {
+	      {
+	          allowing(keyedValues).getItemCount();
+	          will(returnValue(3));
+	          allowing(keyedValues).getKey(0);
+	          will(returnValue(0));
+	          allowing(keyedValues).getKey(1);
+	          will(returnValue(1));
+	          allowing(keyedValues).getKey(2);
+	          will(returnValue(2));
+	          allowing(keyedValues).getValue(0);
+	          will(returnValue(5));
+	          allowing(keyedValues).getValue(1);
+	          will(returnValue(5));
+	          allowing(keyedValues).getValue(2);
+	          will(returnValue(5));
+	
+	      }
+	  });
+	
+	  KeyedValues result = DataUtilities.getCumulativePercentages(keyedValues);
+	
+	  assertEquals("The cumulative percentage of the first 5 in 3 KeyedValue with sum of 15 should be 0.333", 0.3,
+	          result.getValue(0).doubleValue(), 0.000000001d);     
+	}
+
+
+	/**
+	 * This method tests the getCumulativePercentages() of the first element in three-element KeyedValues object 
+	 */
+	@Test
+	public void getCumulativePercentagesSecondPercentageInThreeElementKV() {
+	  mockingContext.checking(new Expectations() {
+	      {
+	          allowing(keyedValues).getItemCount();
+	          will(returnValue(3));
+	          allowing(keyedValues).getKey(0);
+	          will(returnValue(0));
+	          allowing(keyedValues).getKey(1);
+	          will(returnValue(1));
+	          allowing(keyedValues).getKey(2);
+	          will(returnValue(2));
+	          allowing(keyedValues).getValue(0);
+	          will(returnValue(5));
+	          allowing(keyedValues).getValue(1);
+	          will(returnValue(5));
+	          allowing(keyedValues).getValue(2);
+	          will(returnValue(5));
+	
+	      }
+	  });
+	
+	  KeyedValues result = DataUtilities.getCumulativePercentages(keyedValues);
+	
+	  assertEquals("The cumulative percentage of the second 5 in 3 KeyedValue with sum of 15 should be 0.666667", 0.66667,
+	          result.getValue(1).doubleValue(), 0.000000001d);     
+	}
+
+
+	/**
+	 * This method tests the getCumulativePercentages() of the third element in three-element KeyedValues object 
+	 */
+	@Test
+	public void getCumulativePercentagesThirdPercentageInThreeElementKV() {
+	  mockingContext.checking(new Expectations() {
+	      {
+	          allowing(keyedValues).getItemCount();
+	          will(returnValue(3));
+	          allowing(keyedValues).getKey(0);
+	          will(returnValue(0));
+	          allowing(keyedValues).getKey(1);
+	          will(returnValue(1));
+	          allowing(keyedValues).getKey(2);
+	          will(returnValue(2));
+	          allowing(keyedValues).getValue(0);
+	          will(returnValue(5));
+	          allowing(keyedValues).getValue(1);
+	          will(returnValue(5));
+	          allowing(keyedValues).getValue(2);
+	          will(returnValue(5));
+	
+	      }
+	  });
+	
+	  KeyedValues result = DataUtilities.getCumulativePercentages(keyedValues);
+	
+	  assertEquals("The cumulative percentage of the third 5 in 3 KeyedValue with sum of 15 should be 1.0", 1.0,
+	          result.getValue(2).doubleValue(), 0.000000001d);     
+	}
+	
+
+    /**
+     * ******NEW TEST CASES ADDED*******
+     * This method tests the getCumulativePercentages() with a negative index and should generate an invocation error 
+     */
+    @Test
+    public void getCumulativePercentagesWithNegativeItemCount() {
+    	
+    	mockingContext.checking(new Expectations() {
+            {
+                allowing(keyedValues).getItemCount();
+                will(returnValue(-1));
+                allowing(keyedValues).getKey(0);
+                will(returnValue(0));
+                allowing(keyedValues).getValue(0);
+                will(returnValue(0));
+            }
+        });
+        KeyedValues result = DataUtilities.getCumulativePercentages(keyedValues);
+        try {
+            assertEquals("The cumulative percentage of a single KeyedValue of 0 should result in 0/0", 0.0 / 0.0,
+                    result.getValue(0));
+        }
+        catch(Exception e){
+        	System.out.println("Exception caught using -ve number");
+        }
+
+        
+    }
+    
+    
+    /**
+     * This method tests the getCumulativePercentages() with a negative index and null 
+     * and should generate an invocation error 
+     */
+    @Test
+    public void getCumulativePercentagesTestingWithNegativeItemCountOneKeyedValueOfNull() {
+    	
+    	mockingContext.checking(new Expectations() {
+            {
+                allowing(keyedValues).getItemCount();
+                will(returnValue(-1));
+                allowing(keyedValues).getKey(0);
+                will(returnValue(0));
+                allowing(keyedValues).getValue(0);
+                will(returnValue(null));
+            }
+        });
+        KeyedValues result = DataUtilities.getCumulativePercentages(keyedValues);
+        try {
+            assertEquals("The cumulative percentage of a single KeyedValue of 0 should result in 0/0", 0.0 / 0.0,
+                    result.getValue(0));
+        }
+        catch(Exception e){
+        	System.out.println("Exception caught using -ve number");
+        }
+
+        
+    }
+    
+
 	@Test
 	public void testCalculateColumnTotalValues2DInt() {
 		fail("Not yet implemented");
