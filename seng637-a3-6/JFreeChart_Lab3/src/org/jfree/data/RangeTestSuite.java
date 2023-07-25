@@ -2,6 +2,8 @@ package org.jfree.data;
 
 import static org.junit.Assert.*;
 
+import java.security.InvalidParameterException;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

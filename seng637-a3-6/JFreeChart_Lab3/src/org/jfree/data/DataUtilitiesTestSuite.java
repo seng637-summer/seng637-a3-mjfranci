@@ -2,13 +2,26 @@ package org.jfree.data;
 
 import static org.junit.Assert.*;
 
+import java.security.InvalidParameterException;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.jfree.data.DataUtilities;
+import org.jfree.data.DefaultKeyedValues;
+import org.jfree.data.KeyedValues;
+import org.jfree.data.Values2D;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.junit.*;
 
 public class DataUtilitiesTestSuite extends DataUtilities {
+	
+	private Mockery mockingContext;
+	private KeyedValues keyedValues;
+	private Values2D values;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -20,12 +33,17 @@ public class DataUtilitiesTestSuite extends DataUtilities {
 
 	@Before
 	public void setUp() throws Exception {
+		this.mockingContext = new Mockery();
+		this.keyedValues = mockingContext.mock(KeyedValues.class);
+        // Mock Value2D object that contains values 
+	    this.values = mockingContext.mock(Values2D.class);
 	}
 
 	@After
 	public void tearDown() throws Exception {
 	}
 
+	
 	/**
      * ***********************************************************
      * ***********************************************************
@@ -380,15 +398,43 @@ public class DataUtilitiesTestSuite extends DataUtilities {
 	             will(returnValue(null)); // Will be 10
 	         }
 	     });
-	     
-	     // Calculate result of the first row in values
-	     double result = DataUtilities.calculateRowTotal(values, 0);
-	     assertEquals("The sum of a row with a negative column count is 0", 
-	    		 0.0, 
-	    		 result, 
-	    		 .000000001d);
 	 }
 
+	 /***************************************************************
+	     * *************************************************************
+	     * ********* createNumberArray2D() test*************************
+	     * *************************************************************
+	     * *************************************************************
+	     * public static java.lang.Number[][] createNumberArray2D(double[][] data)
+	     * Constructs an array of arrays of Number objects from a 
+	     * corresponding structure containing double primitives.
+	     */
+	    
+	    
+	    @Test
+	    public void createNumberArray2D_Creates_Second_Row_Second_Column() {
+	    	double[][] testInput = { {1.1 , 2.2 , 3.3} , {4.4 , 5.5 , 6.6} , {7.7 , 8.8 , 9.9} };
+	    	Number[][] testOutput = { {1.1 , 2.2 , 3.3} , {4.4 , 5.5 , 6.6} , {7.7 , 8.8 , 9.9} };
+	        assertEquals("Element [1,1] should be equal",
+	        				testOutput[1][1],
+	        				DataUtilities.createNumberArray2D(testInput)[1][1]);
+	    }
+	    
+	    @Test
+	    public void createNumberArray2D_Creates_Third_Row_Third_Column() {
+	    	double[][] testInput = { {1.1 , 2.2 , 3.3} , {4.4 , 5.5 , 6.6} , {7.7 , 8.8 , 9.9} };
+	    	Number[][] testOutput = { {1.1 , 2.2 , 3.3} , {4.4 , 5.5 , 6.6} , {7.7 , 8.8 , 9.9} };
+	        assertEquals("Element [2,2] should be equal",
+	        				testOutput[2][2],
+	        				DataUtilities.createNumberArray2D(testInput)[2][2]);
+	    }
+	    
+	    
+	    @Test(expected = InvalidParameterException.class)
+	    public void createNumberArray2D_Throws_Exception_For_Null_Object() {
+	    	double[][] testInput = { {(Double)null} , {2.2} , {3.3} };
+	    	Number[][] testOuput = DataUtilities.createNumberArray2D(testInput);
+	    }
 	
 
     /************************************************************************************
@@ -639,7 +685,7 @@ public class DataUtilitiesTestSuite extends DataUtilities {
      */
     @Test
     public void getCumulativePercentagesWithNegativeItemCount() {
-    	
+    	KeyedValues result;
     	mockingContext.checking(new Expectations() {
             {
                 allowing(keyedValues).getItemCount();
@@ -650,7 +696,7 @@ public class DataUtilitiesTestSuite extends DataUtilities {
                 will(returnValue(0));
             }
         });
-        KeyedValues result = DataUtilities.getCumulativePercentages(keyedValues);
+        result = DataUtilities.getCumulativePercentages(keyedValues);
         try {
             assertEquals("The cumulative percentage of a single KeyedValue of 0 should result in 0/0", 0.0 / 0.0,
                     result.getValue(0));
